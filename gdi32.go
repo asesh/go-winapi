@@ -9,6 +9,19 @@ import (
 	"unsafe"
 )
 
+
+// GetDeviceCaps index constants
+const (
+    TA_NOUPDATECP   = 0
+    TA_UPDATECP  = 1
+    TA_LEFT   = 0
+    TA_RIGHT   =2
+    TA_CENTER   =6
+    TA_TOP   = 0
+    TA_BOTTOM  = 8
+    TA_BASELINE =  24
+)
+
 // GetDeviceCaps index constants
 const (
 	DRIVERVERSION   = 0
@@ -1526,4 +1539,12 @@ func TextOut(hdc HDC, nXStart, nYStart int32, lpString *uint16, cchString int32)
 		uintptr(cchString),
 		0)
 	return ret != 0
+}
+
+func SetTextAlign(hdc HDC, fMode uint32) uint32 {
+	ret, _, _ := syscall.Syscall(MustGetProcAddress(libgdi32, "SetTextAlign"), 2,
+		uintptr(hdc),
+		uintptr(fMode),
+		0)
+	return uint32(ret)
 }

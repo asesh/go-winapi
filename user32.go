@@ -11,6 +11,28 @@ import (
 
 const CW_USEDEFAULT = ^0x7fffffff
 
+const (
+    SB_CTL = 2
+    SB_HORZ = 0
+    SB_VERT = 1
+    SB_BOTH = 3
+    SB_LINEUP   = 0
+    SB_LINELEFT   = 0
+    SB_LINEDOWN   = 1
+    SB_LINERIGHT   = 1
+    SB_PAGEUP   = 2
+    SB_PAGELEFT   = 2
+    SB_PAGEDOWN   = 3
+    SB_PAGERIGHT   = 3
+    SB_THUMBPOSITION   = 4
+    SB_THUMBTRACK   = 5
+    SB_TOP   = 6
+    SB_LEFT   = 6
+    SB_BOTTOM   = 7
+    SB_RIGHT   = 7
+    SB_ENDSCROLL   = 8
+)
+
 // MessageBox constants
 const (
 	MB_OK                = 0x00000000
@@ -2534,4 +2556,39 @@ func WindowFromPoint(Point POINT) HWND {
 		0)
 
 	return HWND(ret)
+}
+
+func SetScrollRange(hWnd HWND,  nBar int32,  nMinPos int32,  nMaxPos int32,  bRedraw BOOL) BOOL{
+    SetScrollRange := MustGetProcAddress(libuser32, "SetScrollRange")
+    ret, _, _ := syscall.Syscall6(SetScrollRange, 5,
+		uintptr(hWnd),
+		uintptr(nBar),
+		uintptr(nMinPos),
+		uintptr(nMaxPos),
+		uintptr(bRedraw),
+		0)
+
+	return BOOL(ret)
+}
+
+func SetScrollPos(hWnd HWND, nBar int32, nPos int32, bRedraw BOOL) int32 {
+    SetScrollPos := MustGetProcAddress(libuser32, "SetScrollPos")
+    ret, _, _ := syscall.Syscall6(SetScrollPos, 4,
+		uintptr(hWnd),
+		uintptr(nBar),
+		uintptr(nPos),
+		uintptr(bRedraw),
+		0,
+		0)
+    return int32(ret)
+}
+
+func GetScrollPos(hWnd HWND, nBar int32) int32{
+    GetScrollPos := MustGetProcAddress(libuser32, "GetScrollPos")
+	ret, _, _ := syscall.Syscall(GetScrollPos, 2,
+		uintptr(hWnd),
+		uintptr(nBar),
+		0)
+
+	return int32(ret)
 }
