@@ -2592,3 +2592,65 @@ func GetScrollPos(hWnd HWND, nBar int32) int32{
 
 	return int32(ret)
 }
+
+type SCROLLINFO struct {
+  CbSize  uint32
+  Mask uint32
+  Min int32
+  Max int32
+  Page uint32
+  Pos int32
+  TrackPos int32
+}
+
+const (
+    SIF_RANGE           = 0x0001
+    SIF_PAGE            = 0x0002
+    SIF_POS             = 0x0004
+    SIF_DISABLENOSCROLL = 0x0008
+    SIF_TRACKPOS        = 0x0010
+    SIF_ALL             = (SIF_RANGE | SIF_PAGE | SIF_POS | SIF_TRACKPOS)
+)
+
+func GetScrollInfo(hwnd HWND, fnBar int32, lpsi *SCROLLINFO ) BOOL {
+    GetScrollInfo := MustGetProcAddress(libuser32, "GetScrollInfo")
+	ret, _, _ := syscall.Syscall(GetScrollInfo, 3,
+		uintptr(hwnd),
+		uintptr(fnBar),
+		uintptr(unsafe.Pointer(lpsi)))
+
+	return BOOL(ret)
+}
+
+func SetScrollInfo(hwnd HWND, fnBar int32, lpsi *SCROLLINFO, fRedraw BOOL) int32 {
+    SetScrollInfo := MustGetProcAddress(libuser32, "SetScrollInfo")
+	ret, _, _ := syscall.Syscall6(SetScrollInfo, 4,
+		uintptr(hwnd),
+		uintptr(fnBar),
+		uintptr(unsafe.Pointer(lpsi)),
+        uintptr(fRedraw), 0, 0)
+        
+    return int32(ret)
+}
+
+func ScrollWindow(hWnd HWND, XAmount int32, YAmount int32, lpRect *RECT, lpClipRect *RECT) BOOL{
+    ScrollWindow := MustGetProcAddress(libuser32, "ScrollWindow")
+	ret, _, _ := syscall.Syscall6(ScrollWindow, 5,
+		uintptr(hWnd),
+		uintptr(XAmount),
+		uintptr(YAmount),
+		uintptr(unsafe.Pointer(lpRect)),
+		uintptr(unsafe.Pointer(lpClipRect)), 0)
+        
+    return BOOL(ret)
+}
+
+func UpdateWindow(hWnd HWND) BOOL{
+    UpdateWindow := MustGetProcAddress(libuser32, "UpdateWindow")
+	ret, _, _ := syscall.Syscall(UpdateWindow, 1,
+		uintptr(hWnd),
+		0,
+		0)
+        
+    return BOOL(ret)
+}

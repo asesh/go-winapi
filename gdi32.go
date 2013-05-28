@@ -1317,7 +1317,7 @@ func GetObject(hgdiobj HGDIOBJ, cbBuffer uintptr, lpvObject unsafe.Pointer) int3
 }
 
 func GetStockObject(fnObject int32) HGDIOBJ {
-	ret, _, _ := syscall.Syscall(getDeviceCaps, 1,
+	ret, _, _ := syscall.Syscall(getStockObject, 1,
 		uintptr(fnObject),
 		0,
 		0)
@@ -1370,7 +1370,7 @@ func LineTo(hdc HDC, nXEnd, nYEnd int32) bool {
 	return ret != 0
 }
 
-func MoveToEx(hdc HDC, x, y int, lpPoint *POINT) bool {
+func MoveToEx(hdc HDC, x, y int32, lpPoint *POINT) bool {
 	ret, _, _ := syscall.Syscall6(moveToEx, 4,
 		uintptr(hdc),
 		uintptr(x),
@@ -1547,4 +1547,67 @@ func SetTextAlign(hdc HDC, fMode uint32) uint32 {
 		uintptr(fMode),
 		0)
 	return uint32(ret)
+}
+
+func Polyline(hdc HDC, lppt *POINT, cPoints int32) BOOL {
+	ret, _, _ := syscall.Syscall(MustGetProcAddress(libgdi32, "Polyline"), 3,
+		uintptr(hdc),
+		uintptr(unsafe.Pointer(lppt)),
+		uintptr(cPoints))
+	return BOOL(ret)
+}
+
+func Rectangle(hdc HDC, nLeftRect, nTopRect, nRightRect, nBottomRect int32) BOOL {
+	ret, _, _ := syscall.Syscall6(MustGetProcAddress(libgdi32, "Rectangle"), 5,
+		uintptr(hdc),
+		uintptr(nLeftRect),
+		uintptr(nTopRect),
+		uintptr(nRightRect),
+		uintptr(nBottomRect),
+		0)
+	return BOOL(ret)
+}
+
+func RoundRect(hdc HDC, nLeftRect, nTopRect , nRightRect , nBottomRect , nWidth , nHeight int32) BOOL {
+	ret, _, _ := syscall.Syscall9(MustGetProcAddress(libgdi32, "RoundRect"), 7,
+		uintptr(hdc),
+		uintptr(nLeftRect),
+		uintptr(nTopRect),
+		uintptr(nRightRect),
+		uintptr(nBottomRect),
+		uintptr(nWidth),
+		uintptr(nHeight),
+		0,
+		0)
+        
+    return BOOL(ret)
+}
+
+func PolyBezier(hdc HDC, lppt *POINT, cPoints int32) BOOL {
+	ret, _, _ := syscall.Syscall(MustGetProcAddress(libgdi32, "PolyBezier"), 3,
+		uintptr(hdc),
+		uintptr(unsafe.Pointer(lppt)),
+		uintptr(cPoints))
+	return BOOL(ret)
+}
+
+const (
+    ALTERNATE = 1
+    WINDING = 2
+)
+
+func SetPolyFillMode(hdc HDC, iPolyFillMode int32) int32 {
+	ret, _, _ := syscall.Syscall(MustGetProcAddress(libgdi32, "SetPolyFillMode"), 2,
+		uintptr(hdc),
+		uintptr(iPolyFillMode),
+		0)
+	return int32(ret)
+}
+
+func Polygon(hdc HDC, lpPoints *POINT, nCount int32) BOOL{
+	ret, _, _ := syscall.Syscall(MustGetProcAddress(libgdi32, "Polygon"), 3,
+		uintptr(hdc),
+        uintptr(unsafe.Pointer(lpPoints)),
+		uintptr(nCount))
+	return BOOL(ret)
 }
