@@ -1611,3 +1611,52 @@ func Polygon(hdc HDC, lpPoints *POINT, nCount int32) BOOL{
 		uintptr(nCount))
 	return BOOL(ret)
 }
+
+const (
+    MM_TEXT			= 1
+    MM_LOMETRIC		= 2
+    MM_HIMETRIC		= 3
+    MM_LOENGLISH	= 4
+    MM_HIENGLISH	= 5
+    MM_TWIPS		= 6
+    MM_ISOTROPIC	= 7
+    MM_ANISOTROPIC	= 8
+)
+
+func SetMapMode(hdc HDC, fnMapMode int32) int32{
+	ret, _, _ := syscall.Syscall(MustGetProcAddress(libgdi32, "SetMapMode"), 2,
+		uintptr(hdc),
+        uintptr(fnMapMode),
+		0)
+	return int32(ret)
+}
+
+func SetWindowExtEx(hdc HDC, nXExtent, nYExtent int32, lpSize *SIZE) BOOL{
+	ret, _, _ := syscall.Syscall6(MustGetProcAddress(libgdi32, "SetWindowExtEx"), 4,
+		uintptr(hdc),
+		uintptr(nXExtent),
+		uintptr(nYExtent),
+		uintptr(unsafe.Pointer(lpSize)),
+		0,
+		0)
+	return BOOL(ret)
+}
+
+func SetViewportExtEx(hdc HDC, nXExtent, nYExtent int32, lpSize *SIZE) BOOL{
+	ret, _, _ := syscall.Syscall6(MustGetProcAddress(libgdi32, "SetViewportExtEx"), 4,
+		uintptr(hdc),
+		uintptr(nXExtent),
+		uintptr(nYExtent),
+		uintptr(unsafe.Pointer(lpSize)),
+		0,
+		0)
+	return BOOL(ret)
+}
+
+func DPtoLP(hdc HDC, lpPoints *POINT, nCount int32) BOOL{
+	ret, _, _ := syscall.Syscall(MustGetProcAddress(libgdi32, "DPtoLP"), 3,
+		uintptr(hdc),
+        uintptr(unsafe.Pointer(lpPoints)),
+        uintptr(nCount))
+	return BOOL(ret)
+}
