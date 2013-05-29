@@ -1660,3 +1660,12 @@ func DPtoLP(hdc HDC, lpPoints *POINT, nCount int32) BOOL{
         uintptr(nCount))
 	return BOOL(ret)
 }
+
+
+func CreateSolidBrush(crColor COLORREF) HBRUSH{
+	ret, _, _ := syscall.Syscall(MustGetProcAddress(libgdi32, "CreateSolidBrush"), 1,
+		uintptr(crColor),
+        0,
+        0)
+	return HBRUSH(ret)
+}

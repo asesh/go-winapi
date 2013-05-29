@@ -2654,3 +2654,12 @@ func UpdateWindow(hWnd HWND) BOOL{
         
     return BOOL(ret)
 }
+
+
+func FillRect(hDC HDC, lprc *RECT, hbr HBRUSH) int32{
+	ret, _, _ := syscall.Syscall(MustGetProcAddress(libuser32, "FillRect"), 3,
+		uintptr(hDC),
+        uintptr(unsafe.Pointer(lprc)),
+        uintptr(hbr))
+	return int32(ret)
+}
