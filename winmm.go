@@ -1,9 +1,30 @@
+// Copyright 2010 The go-winapi Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
 package winapi
 
 import (
     "syscall"
     "unsafe"
 )
+
+var (
+	// Library
+	libwinmm uintptr
+
+	// Functions
+	playSound             uintptr
+)
+
+func init(){
+	// Library
+	libwinmm = MustLoadLibrary("Winmm.dll")
+
+	// Functions
+    playSound = MustGetProcAddress(libwinmm, "PlaySoundW")
+}
+
 
 const (
     SND_SYNC      =      0x0000  /* play synchronously (default) */
@@ -29,8 +50,7 @@ const (
 )
 
 func PlaySound(pszSound *uint16, hmod HWND, fdwSound uint32) BOOL {
-    winmm := MustLoadLibrary("Winmm.dll")
-    playSound := MustGetProcAddress(winmm, "PlaySoundW")
+    
 	ret, _, _ := syscall.Syscall(playSound, 3,
         uintptr(unsafe.Pointer(pszSound)),
 		uintptr(hmod),
