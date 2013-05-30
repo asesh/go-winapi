@@ -2671,3 +2671,19 @@ func ShowCursor(bShow BOOL) int32{
         0)
 	return int32(ret)
 }
+
+func GetKeyNameText(lParam uintptr, lpString *uint16, chSize int32) int32 {
+	ret, _, _ := syscall.Syscall(MustGetProcAddress(libuser32, "GetKeyNameTextW"), 3,
+		lParam,
+        uintptr(unsafe.Pointer(lpString)),
+        uintptr(chSize))
+	return int32(ret)
+}
+
+func GetKeyNameTextA(lParam uintptr, lpString *uint16, chSize int32) int32 {
+	ret, _, _ := syscall.Syscall(MustGetProcAddress(libuser32, "GetKeyNameTextA"), 3,
+		lParam,
+        uintptr(unsafe.Pointer(lpString)),
+        uintptr(chSize))
+	return int32(ret)
+}
