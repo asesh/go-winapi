@@ -730,6 +730,7 @@ type (
 	COLORREF     uint32
 	HBITMAP      HGDIOBJ
 	HBRUSH       HGDIOBJ
+	HRGN         HGDIOBJ
 	HDC          HANDLE
 	HFONT        HGDIOBJ
 	HGDIOBJ      HANDLE
@@ -1668,4 +1669,82 @@ func CreateSolidBrush(crColor COLORREF) HBRUSH{
         0,
         0)
 	return HBRUSH(ret)
+}
+
+func CreateEllipticRgn(nLeftRect, nTopRect, nRightRect, nBottomRect int32) HRGN {
+	ret, _, _ := syscall.Syscall6(MustGetProcAddress(libgdi32, "CreateEllipticRgn"), 4,
+		uintptr(nLeftRect),
+		uintptr(nTopRect),
+		uintptr(nRightRect),
+		uintptr(nBottomRect),
+		0,
+		0)
+        
+	return HRGN(ret)
+}
+
+func CreateRectRgn(nLeftRect, nTopRect, nRightRect, nBottomRect int32) HRGN {
+	ret, _, _ := syscall.Syscall6(MustGetProcAddress(libgdi32, "CreateRectRgn"), 4,
+		uintptr(nLeftRect),
+		uintptr(nTopRect),
+		uintptr(nRightRect),
+		uintptr(nBottomRect),
+		0,
+		0)
+        
+	return HRGN(ret)
+}
+
+/* CombineRgn() Styles */
+const (
+    RGN_AND   = 1
+    RGN_OR    = 2
+    RGN_XOR   = 3
+    RGN_DIFF  = 4
+    RGN_COPY  = 5
+    RGN_MIN   = RGN_AND
+    RGN_MAX   = RGN_COPY
+)
+
+/* Region Flags */
+const (
+    ERROR           = 0
+    NULLREGION      = 1
+    SIMPLEREGION    = 2
+    COMPLEXREGION   = 3
+    RGN_ERROR       = ERROR
+)
+
+func CombineRgn(hrgnDest, hrgnSrc1, hrgnSrc2 HRGN, fnCombineMode int32) int32{
+	ret, _, _ := syscall.Syscall6(MustGetProcAddress(libgdi32, "CombineRgn"), 4,
+		uintptr(hrgnDest),
+		uintptr(hrgnSrc1),
+		uintptr(hrgnSrc2),
+		uintptr(fnCombineMode),
+		0,
+		0)
+        
+	return int32(ret)
+}
+
+
+func SelectClipRgn(hdc HDC, hrgn HRGN) int32 {
+	ret, _, _ := syscall.Syscall(MustGetProcAddress(libgdi32, "SelectClipRgn"), 1,
+		uintptr(hdc),
+        uintptr(hrgn),
+        0)
+        
+	return int32(ret)
+}
+
+func SetViewportOrgEx(hdc HDC, X, Y int32, lpPoint *POINT) BOOL {
+	ret, _, _ := syscall.Syscall6(MustGetProcAddress(libgdi32, "SetViewportOrgEx"), 4,
+		uintptr(hdc),
+		uintptr(X),
+		uintptr(Y),
+		uintptr(unsafe.Pointer(lpPoint)),
+		0,
+		0)
+        
+	return BOOL(ret)
 }
