@@ -2663,3 +2663,11 @@ func FillRect(hDC HDC, lprc *RECT, hbr HBRUSH) int32{
         uintptr(hbr))
 	return int32(ret)
 }
+
+func ShowCursor(bShow BOOL) int32{
+	ret, _, _ := syscall.Syscall(MustGetProcAddress(libuser32, "ShowCursor"), 1,
+		uintptr(bShow),
+        0,
+        0)
+	return int32(ret)
+}
