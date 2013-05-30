@@ -1748,3 +1748,63 @@ func SetViewportOrgEx(hdc HDC, X, Y int32, lpPoint *POINT) BOOL {
         
 	return BOOL(ret)
 }
+
+func GetTextFace(hdc HDC, nCount int32, lpFaceName *uint16) int32{
+    ret, _, _ := syscall.Syscall(MustGetProcAddress(libgdi32, "GetTextFaceW"), 3,
+		uintptr(hdc),
+		uintptr(nCount),
+		uintptr(unsafe.Pointer(lpFaceName)))
+        
+	return int32(ret)
+}
+
+func GetTextFaceA(hdc HDC, nCount int32, lpFaceName *uint16) int32{
+    ret, _, _ := syscall.Syscall(MustGetProcAddress(libgdi32, "GetTextFaceA"), 3,
+		uintptr(hdc),
+		uintptr(nCount),
+		uintptr(unsafe.Pointer(lpFaceName)))
+        
+	return int32(ret)
+}
+
+func CreateFont(nHeight, nWidth, nEscapement, nOrientation, fnWeight int32, fdwItalic, fdwUnderline, fdwStrikeOut, fdwCharSet, fdwOutputPrecision, fdwClipPrecision, fdwQuality, fdwPitchAndFamily uint32, lpszFace *uint16) HFONT{
+    ret, _, _ := syscall.Syscall15(MustGetProcAddress(libgdi32, "CreateFontW"), 14,
+		uintptr(nHeight),
+		uintptr(nWidth),
+		uintptr(nEscapement),
+		uintptr(nOrientation),
+		uintptr(fnWeight),
+		uintptr(fdwItalic),
+		uintptr(fdwUnderline),
+		uintptr(fdwStrikeOut),
+		uintptr(fdwCharSet),
+		uintptr(fdwOutputPrecision),
+		uintptr(fdwClipPrecision),
+		uintptr(fdwQuality),
+		uintptr(fdwPitchAndFamily),
+		uintptr(unsafe.Pointer(lpszFace)),
+        0)
+        
+	return HFONT(ret)
+}
+
+func CreateFontA(nHeight, nWidth, nEscapement, nOrientation, fnWeight int32, fdwItalic, fdwUnderline, fdwStrikeOut, fdwCharSet, fdwOutputPrecision, fdwClipPrecision, fdwQuality, fdwPitchAndFamily uint32, lpszFace *uint16) HFONT{
+    ret, _, _ := syscall.Syscall15(MustGetProcAddress(libgdi32, "CreateFontA"), 14,
+		uintptr(nHeight),
+		uintptr(nWidth),
+		uintptr(nEscapement),
+		uintptr(nOrientation),
+		uintptr(fnWeight),
+		uintptr(fdwItalic),
+		uintptr(fdwUnderline),
+		uintptr(fdwStrikeOut),
+		uintptr(fdwCharSet),
+		uintptr(fdwOutputPrecision),
+		uintptr(fdwClipPrecision),
+		uintptr(fdwQuality),
+		uintptr(fdwPitchAndFamily),
+		uintptr(unsafe.Pointer(lpszFace)),
+        0)
+        
+	return HFONT(ret)
+}
