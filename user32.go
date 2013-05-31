@@ -2687,3 +2687,46 @@ func GetKeyNameTextA(lParam uintptr, lpString *uint16, chSize int32) int32 {
         uintptr(chSize))
 	return int32(ret)
 }
+
+func SetCaretPos(X, Y int32) BOOL {
+	ret, _, _ := syscall.Syscall(MustGetProcAddress(libuser32, "SetCaretPos"), 2,
+		uintptr(X),
+		uintptr(Y),
+        0)
+	return BOOL(ret)
+}
+
+func ShowCaret(hWnd HWND) BOOL{
+	ret, _, _ := syscall.Syscall(MustGetProcAddress(libuser32, "ShowCaret"), 1,
+		uintptr(hWnd),
+        0,
+        0)
+	return BOOL(ret)
+}
+
+func DestroyCaret() BOOL{
+	ret, _, _ := syscall.Syscall(MustGetProcAddress(libuser32, "DestroyCaret"), 0,
+		0,
+        0,
+        0)
+	return BOOL(ret)
+}
+
+func CreateCaret(hWnd HWND, hBitmap HBITMAP, nWidth, nHeight int32) BOOL{
+	ret, _, _ := syscall.Syscall6(MustGetProcAddress(libuser32, "CreateCaret"), 4,
+		uintptr(hWnd),
+		uintptr(hBitmap),
+		uintptr(nWidth),
+		uintptr(nHeight),
+		0,
+		0)
+    return BOOL(ret)
+}
+
+func HideCaret(hWnd HWND) BOOL {
+	ret, _, _ := syscall.Syscall(MustGetProcAddress(libuser32, "HideCaret"), 1,
+		uintptr(hWnd),
+        0,
+        0)
+	return BOOL(ret)
+}

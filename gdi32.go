@@ -1542,6 +1542,17 @@ func TextOut(hdc HDC, nXStart, nYStart int32, lpString *uint16, cchString int32)
 	return ret != 0
 }
 
+func TextOutA(hdc HDC, nXStart, nYStart int32, lpString *uint16, cchString int32) bool {
+	ret, _, _ := syscall.Syscall6(MustGetProcAddress(libgdi32, "TextOutA"), 5,
+		uintptr(hdc),
+		uintptr(nXStart),
+		uintptr(nYStart),
+		uintptr(unsafe.Pointer(lpString)),
+		uintptr(cchString),
+		0)
+	return ret != 0
+}
+
 func SetTextAlign(hdc HDC, fMode uint32) uint32 {
 	ret, _, _ := syscall.Syscall(MustGetProcAddress(libgdi32, "SetTextAlign"), 2,
 		uintptr(hdc),
