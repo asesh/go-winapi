@@ -1819,3 +1819,24 @@ func CreateFontA(nHeight, nWidth, nEscapement, nOrientation, fnWeight int32, fdw
         
 	return HFONT(ret)
 }
+
+func SetPixel(hdc HDC, X, Y int32, crColor COLORREF) COLORREF {
+	ret, _, _ := syscall.Syscall6(MustGetProcAddress(libgdi32, "SetPixel"), 4,
+		uintptr(hdc),
+		uintptr(X),
+		uintptr(Y),
+		uintptr(crColor),
+		0,
+		0)
+        
+	return COLORREF(ret)
+}
+
+func CreatePen(fnPenStyle, nWidth int32, crColor COLORREF)HPEN{
+    ret, _, _ := syscall.Syscall(MustGetProcAddress(libgdi32, "CreatePen"), 3,
+		uintptr(fnPenStyle),
+		uintptr(nWidth),
+		uintptr(crColor))
+        
+	return HPEN(ret)
+}
