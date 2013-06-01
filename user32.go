@@ -2730,3 +2730,28 @@ func HideCaret(hWnd HWND) BOOL {
         0)
 	return BOOL(ret)
 }
+
+func MessageBeep(uType uint32) BOOL{
+	ret, _, _ := syscall.Syscall(MustGetProcAddress(libuser32, "MessageBeep"), 1,
+		uintptr(uType),
+        0,
+        0)
+	return BOOL(ret)
+}
+
+
+func ClientToScreen(hWnd HWND, lpPoint *POINT) BOOL{
+	ret, _, _ := syscall.Syscall(MustGetProcAddress(libuser32, "ClientToScreen"), 2,
+		uintptr(hWnd),
+        uintptr(unsafe.Pointer(lpPoint)),
+        0)
+	return BOOL(ret)
+}
+
+func GetDlgItem(hDlg HWND, nIDDlgItem int32) HWND {
+	ret, _, _ := syscall.Syscall(MustGetProcAddress(libuser32, "GetDlgItem"), 2,
+		uintptr(hDlg),
+        uintptr(nIDDlgItem),
+        0)
+	return HWND(ret)
+}
