@@ -1879,3 +1879,28 @@ func GetROP2(hdc HDC)int32 {
         
 	return int32(ret)
 }
+
+
+func OffsetWindowOrgEx(hdc HDC, nXOffset, nYOffset int32, lpPoint *POINT) BOOL{
+	ret, _, _ := syscall.Syscall6(MustGetProcAddress(libgdi32, "OffsetWindowOrgEx"), 4,
+		uintptr(hdc),
+		uintptr(nXOffset),
+		uintptr(nYOffset),
+		uintptr(unsafe.Pointer(lpPoint)),
+		0,
+		0)
+        
+	return BOOL(ret)
+}
+
+func SetWindowOrgEx(hdc HDC, X, Y int32, lpPoint *POINT) BOOL {
+	ret, _, _ := syscall.Syscall6(MustGetProcAddress(libgdi32, "SetWindowOrgEx"), 4,
+		uintptr(hdc),
+		uintptr(X),
+		uintptr(Y),
+		uintptr(unsafe.Pointer(lpPoint)),
+		0,
+		0)
+        
+	return BOOL(ret)
+}
