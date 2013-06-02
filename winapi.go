@@ -108,6 +108,19 @@ func RGB(r, g, b int32) COLORREF{
     r = r & 0xff
     g = (g & 0xff) <<4
     b = (b & 0xff) <<8
-    return COLORREF( r | g | b )
-    
+    return COLORREF( r | g | b )    
+}
+
+func GetRValue(cr COLORREF) uint32{
+    return (uint32(cr) & 0xff)
+}
+
+
+func GetGValue(cr COLORREF) uint32{
+    return ((uint32(cr) >> 4)& 0xff)
+}
+
+
+func GetBValue(cr COLORREF) uint32{
+    return ((uint32(cr)>>8) & 0xff)
 }

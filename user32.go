@@ -2860,8 +2860,7 @@ func ScrollWindow(hWnd HWND, XAmount int32, YAmount int32, lpRect *RECT, lpClipR
 }
 
 func UpdateWindow(hWnd HWND) BOOL{
-    UpdateWindow := MustGetProcAddress(libuser32, "UpdateWindow")
-	ret, _, _ := syscall.Syscall(UpdateWindow, 1,
+	ret, _, _ := syscall.Syscall(MustGetProcAddress(libuser32, "UpdateWindow"), 1,
 		uintptr(hWnd),
 		0,
 		0)
@@ -2969,3 +2968,44 @@ func GetDlgItem(hDlg HWND, nIDDlgItem int32) HWND {
         0)
 	return HWND(ret)
 }
+
+func DrawText(hdc HDC, lpchText *uint16, nCount int32, lpRect *RECT, uFormat uint32) int32{
+	ret, _, _ := syscall.Syscall6(MustGetProcAddress(libuser32, "DrawTextW"), 5,
+		uintptr(hdc),
+		uintptr(unsafe.Pointer(lpchText)),
+		uintptr(nCount),
+		uintptr(unsafe.Pointer(lpRect)),
+		uintptr(uFormat),
+		0)
+        
+	return int32(ret)
+}
+
+func DrawTextA(hdc HDC, lpchText *uint16, nCount int32, lpRect *RECT, uFormat uint32) int32{
+	ret, _, _ := syscall.Syscall6(MustGetProcAddress(libuser32, "DrawTextA"), 5,
+		uintptr(hdc),
+		uintptr(unsafe.Pointer(lpchText)),
+		uintptr(nCount),
+		uintptr(unsafe.Pointer(lpRect)),
+		uintptr(uFormat),
+		0)
+        
+	return int32(ret)
+}
+
+func ValidateRect(hWnd HWND, lpRect *RECT)BOOL{
+	ret, _, _ := syscall.Syscall(MustGetProcAddress(libuser32, "ValidateRect"), 2,
+		uintptr(hWnd),
+        uintptr(unsafe.Pointer(lpRect)),
+        0)
+	return BOOL(ret)
+}
+
+func GetDialogBaseUnits() int64{
+	ret, _, _ := syscall.Syscall(MustGetProcAddress(libuser32, "GetDialogBaseUnits"), 0,
+		0,
+        0,
+        0)
+	return int64(ret)
+}
+

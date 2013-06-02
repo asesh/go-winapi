@@ -1904,3 +1904,17 @@ func SetWindowOrgEx(hdc HDC, X, Y int32, lpPoint *POINT) BOOL {
         
 	return BOOL(ret)
 }
+
+func GetPixel(hdc HDC, nXPos, nYPos int32) COLORREF {
+	ret, _, _ := syscall.Syscall6(MustGetProcAddress(libgdi32, "GetPixel"), 3,
+		uintptr(hdc),
+		uintptr(nXPos),
+		uintptr(nYPos),
+		0,
+		0,
+		0)
+        
+	return COLORREF(ret)
+
+}
+
