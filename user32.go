@@ -3009,3 +3009,20 @@ func GetDialogBaseUnits() int64{
 	return int64(ret)
 }
 
+func FrameRect(hDC HDC, lprc *RECT, hbr HBRUSH)int32{
+	ret, _, _ := syscall.Syscall(MustGetProcAddress(libuser32, "FrameRect"), 3,
+		uintptr(hDC),
+        uintptr(unsafe.Pointer(lprc)),
+        uintptr(hbr))
+        
+	return int32(ret)
+}
+
+func InvertRect(hDC HDC, lprc *RECT) BOOL{
+	ret, _, _ := syscall.Syscall(MustGetProcAddress(libuser32, "InvertRect"), 2,
+		uintptr(hDC),
+        uintptr(unsafe.Pointer(lprc)),
+        0)
+        
+	return BOOL(ret)
+}
