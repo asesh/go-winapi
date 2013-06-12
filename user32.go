@@ -33,6 +33,42 @@ const (
     SB_ENDSCROLL   = 8
 )
 
+// Scroll bar messages
+const (
+    SBM_SETPOS               =   0x00E0
+    SBM_GETPOS               =   0x00E1
+    SBM_SETRANGE             =   0x00E2
+    SBM_SETRANGEREDRAW       =   0x00E6
+    SBM_GETRANGE             =   0x00E3
+    SBM_ENABLE_ARROWS        =   0x00E4
+    SBM_SETSCROLLINFO        =   0x00E9
+    SBM_GETSCROLLINFO        =   0x00EA
+    SBM_GETSCROLLBARINFO     =   0x00EB
+)
+
+// Scroll Bar styles
+const (
+    SBS_HORZ                    = 0x0000
+    SBS_VERT                    = 0x0001
+    SBS_TOPALIGN                = 0x0002
+    SBS_LEFTALIGN               = 0x0002
+    SBS_BOTTOMALIGN             = 0x0004
+    SBS_RIGHTALIGN              = 0x0004
+    SBS_SIZEBOXTOPLEFTALIGN     = 0x0002
+    SBS_SIZEBOXBOTTOMRIGHTALIGN = 0x0004
+    SBS_SIZEBOX                 = 0x0008
+    SBS_SIZEGRIP                = 0x0010
+)
+
+// Status Bar styles 
+const (
+    SBT_OWNERDRAW       =           0x1000      
+    SBT_NOBORDERS       =           0x0100      
+    SBT_POPOUT          =           0x0200      
+    SBT_RTLREADING      =           0x0400      
+    SBT_NOTABPARSING    =           0x0800 
+)
+
 // MessageBox constants
 const (
 	MB_OK                = 0x00000000
@@ -3022,6 +3058,37 @@ func InvertRect(hDC HDC, lprc *RECT) BOOL{
 	ret, _, _ := syscall.Syscall(MustGetProcAddress(libuser32, "InvertRect"), 2,
 		uintptr(hDC),
         uintptr(unsafe.Pointer(lprc)),
+        0)
+        
+	return BOOL(ret)
+}
+
+const (
+    GCL_MENUNAME        = -8
+    GCL_HBRBACKGROUND   = -10
+    GCL_HCURSOR         = -12
+    GCL_HICON           = -14
+    GCL_HMODULE         = -16
+    GCL_CBWNDEXTRA      = -18
+    GCL_CBCLSEXTRA      = -20
+    GCL_WNDPROC         = -24
+    GCL_STYLE           = -26
+    GCW_ATOM            = -32
+)
+
+func SetClassLong(hWnd HWND, nIndex int32, dwNewLong int32) uint32{
+	ret, _, _ := syscall.Syscall(MustGetProcAddress(libuser32, "SetClassLongW"), 3,
+		uintptr(hWnd),
+        uintptr(nIndex),
+        uintptr(dwNewLong))
+        
+	return uint32(ret)
+}
+
+func SetWindowText(hWnd HWND, lpString *uint16) BOOL{
+	ret, _, _ := syscall.Syscall(MustGetProcAddress(libuser32, "SetWindowTextW"), 2,
+		uintptr(hWnd),
+        uintptr(unsafe.Pointer(lpString)),
         0)
         
 	return BOOL(ret)

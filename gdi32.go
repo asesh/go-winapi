@@ -1918,3 +1918,11 @@ func GetPixel(hdc HDC, nXPos, nYPos int32) COLORREF {
 
 }
 
+func SetBkColor(hdc HDC, crColor COLORREF) COLORREF{
+	ret, _, _ := syscall.Syscall(MustGetProcAddress(libgdi32, "SetBkColor"), 2,
+		uintptr(hdc),
+		uintptr(crColor),
+		0)
+        
+	return COLORREF(ret)
+}
