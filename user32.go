@@ -12,6 +12,18 @@ import (
 const CW_USEDEFAULT = ^0x7fffffff
 
 const (
+    DDL_READWRITE   = 0
+    DDL_READONLY    = 1
+    DDL_HIDDEN      = 2
+    DDL_SYSTEM      = 4
+    DDL_DIRECTORY   = 16
+    DDL_ARCHIVE     = 32
+    DDL_POSTMSGS    = 8192
+    DDL_DRIVES      = 16384
+    DDL_EXCLUSIVE   = 32768
+)
+
+const (
     SB_CTL = 2
     SB_HORZ = 0
     SB_VERT = 1

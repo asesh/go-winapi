@@ -172,6 +172,12 @@ type (
 	HINSTANCE HANDLE
 	LCID      uint32
     LCTYPE    uint32
+    DWORD     uint32
+    DWORD32   uint32
+    DWORDLONG uint64   
+    DWORD64   uint64   
+    LPTSTR    *uint16
+    LPCTSTR    *uint16    
 )
 
 type FILETIME struct {
@@ -406,4 +412,22 @@ func GetLocaleInfoA(Locale LCID,  LCType LCTYPE, lpLCData *uint16, cchData int32
 		0)
         
 	return int32(ret)
+}
+
+func GetCurrentDirectory(nBufferLength DWORD, lpBuffer uintptr) DWORD{
+	ret, _, _ := syscall.Syscall(MustGetProcAddress(libkernel32, "GetCurrentDirectoryW"), 2,
+		uintptr(nBufferLength),
+		uintptr(unsafe.Pointer(lpBuffer)),
+		0)
+        
+	return DWORD(ret)    
+}
+
+func SetCurrentDirectory(lpPathName LPCTSTR) BOOL{
+	ret, _, _ := syscall.Syscall(MustGetProcAddress(libkernel32, "SetCurrentDirectoryW"), 1,
+		uintptr(unsafe.Pointer(lpPathName)),
+        0,
+		0)
+        
+	return BOOL(ret)    
 }
