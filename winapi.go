@@ -106,8 +106,8 @@ func BoolToBOOL(value bool) BOOL {
 
 func RGB(r, g, b int32) COLORREF{    
     r = r & 0xff
-    g = (g & 0xff) <<4
-    b = (b & 0xff) <<8
+    g = (g & 0xff) <<8
+    b = (b & 0xff) <<16
     return COLORREF( r | g | b )    
 }
 
