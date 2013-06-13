@@ -3105,3 +3105,39 @@ func SetWindowText(hWnd HWND, lpString *uint16) BOOL{
         
 	return BOOL(ret)
 }
+
+func DrawIcon(hDC HDC, X, Y int32, hIcon HICON) BOOL{
+	ret, _, _ := syscall.Syscall6(MustGetProcAddress(libuser32, "DrawIcon"), 4,
+		uintptr(hDC),
+		uintptr(X),
+		uintptr(Y),
+		uintptr(hIcon),
+		0,
+		0)
+        
+	return BOOL(ret)
+}
+
+func LoadString(hInstance HINSTANCE, uID UINT, lpBuffer uintptr, nBufferMax INT) INT{
+	ret, _, _ := syscall.Syscall6(MustGetProcAddress(libuser32, "LoadStringW"), 4,
+		uintptr(hInstance),
+		uintptr(uID),
+		lpBuffer,
+		uintptr(nBufferMax),
+		0,
+		0)
+        
+	return INT(ret)
+}
+
+func LoadStringA(hInstance HINSTANCE, uID UINT, lpBuffer uintptr, nBufferMax INT) INT{
+	ret, _, _ := syscall.Syscall6(MustGetProcAddress(libuser32, "LoadStringA"), 4,
+		uintptr(hInstance),
+		uintptr(uID),
+		lpBuffer,
+		uintptr(nBufferMax),
+		0,
+		0)
+        
+	return INT(ret)
+}

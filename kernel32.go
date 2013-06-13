@@ -166,18 +166,23 @@ var (
 )
 
 type (
-	ATOM      uint16
-	HANDLE    uintptr
-	HGLOBAL   HANDLE
-	HINSTANCE HANDLE
-	LCID      uint32
+    ATOM      uint16
+    HANDLE    uintptr
+    HGLOBAL   HANDLE
+    HINSTANCE HANDLE
+    HMODULE   HANDLE
+    HRSRC     HANDLE
+    LCID      uint32
     LCTYPE    uint32
     DWORD     uint32
     DWORD32   uint32
     DWORDLONG uint64   
     DWORD64   uint64   
     LPTSTR    *uint16
-    LPCTSTR    *uint16    
+    LPCTSTR   *uint16    
+    INT       int32
+    UINT      uint32
+    LPVOID    uintptr
 )
 
 type FILETIME struct {
@@ -430,4 +435,49 @@ func SetCurrentDirectory(lpPathName LPCTSTR) BOOL{
 		0)
         
 	return BOOL(ret)    
+}
+
+func FindResource(hModule HMODULE, lpName, lpType LPCTSTR) HRSRC {
+	ret, _, _ := syscall.Syscall(MustGetProcAddress(libkernel32, "FindResourceW"), 3,
+		uintptr(hModule),
+        uintptr(unsafe.Pointer(lpName)),
+		uintptr(unsafe.Pointer(lpType)))
+        
+	return HRSRC(ret) 
+}
+
+func LoadResource(hModule HMODULE, hResInfo HRSRC) HGLOBAL {
+	ret, _, _ := syscall.Syscall(MustGetProcAddress(libkernel32, "LoadResource"), 2,
+		uintptr(hModule),
+        uintptr(hResInfo),
+		0)
+        
+	return HGLOBAL(ret) 
+}
+
+func LockResource(hResData HGLOBAL)LPVOID {
+	ret, _, _ := syscall.Syscall(MustGetProcAddress(libkernel32, "LockResource"), 2,
+		uintptr(hResData),
+        0,
+		0)
+        
+	return LPVOID(ret) 
+}
+
+func SizeofResource(hModule HMODULE, hResInfo HRSRC)DWORD{
+	ret, _, _ := syscall.Syscall(MustGetProcAddress(libkernel32, "SizeofResource"), 2,
+		uintptr(hModule),
+		uintptr(hResInfo),
+		0)
+        
+	return DWORD(ret) 
+}
+
+func FreeResource(hglbResource HGLOBAL) BOOL{
+	ret, _, _ := syscall.Syscall(MustGetProcAddress(libkernel32, "FreeResource"), 1,
+		uintptr(hglbResource),
+		0,
+		0)
+        
+	return BOOL(ret) 
 }
