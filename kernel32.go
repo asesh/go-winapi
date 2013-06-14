@@ -182,6 +182,7 @@ type (
     LPCTSTR   *uint16    
     INT       int32
     UINT      uint32
+    UINT_PTR  uint32
     LPVOID    uintptr
 )
 

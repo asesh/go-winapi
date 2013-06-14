@@ -3200,3 +3200,25 @@ func TrackPopupMenu(hMenu HMENU, uFlags UINT, x, y int32, nReserved int32, hWnd 
         
 	return BOOL(ret)
 }
+
+func GetSystemMenu(hWnd HWND, bRevert BOOL)HMENU {
+	ret, _, _ := syscall.Syscall(MustGetProcAddress(libuser32, "GetSystemMenu"), 2,
+		uintptr(hWnd),
+		uintptr(bRevert),
+		0)
+        
+	return HMENU(ret)
+}
+
+
+func AppendMenu(hMenu HMENU, uFlags UINT, uIDNewItem UINT_PTR, lpNewItem LPCTSTR) BOOL {
+	ret, _, _ := syscall.Syscall6(MustGetProcAddress(libuser32, "AppendMenuW"), 4,
+		uintptr(hMenu),
+		uintptr(uFlags),
+		uintptr(uIDNewItem),
+		uintptr(unsafe.Pointer(lpNewItem)),
+		0,
+		0)
+        
+	return BOOL(ret)    
+}
