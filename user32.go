@@ -3168,3 +3168,35 @@ func  EnableMenuItem(     hMenu HMENU,    uIDEnableItem,     uEnable UINT) BOOL{
         
 	return BOOL(ret)
 }
+
+func LoadMenu(hInstance HINSTANCE, lpMenuName LPCTSTR) HMENU {
+	ret, _, _ := syscall.Syscall(MustGetProcAddress(libuser32, "LoadMenuW"), 2,
+		uintptr(hInstance),
+		uintptr(unsafe.Pointer(lpMenuName)),
+		0)
+        
+	return HMENU(ret)
+}
+
+func GetSubMenu(hMenu HMENU,nPos int32) HMENU{
+	ret, _, _ := syscall.Syscall(MustGetProcAddress(libuser32, "GetSubMenu"), 2,
+		uintptr(hMenu),
+		uintptr(nPos),
+		0)
+        
+	return HMENU(ret)
+}
+
+func TrackPopupMenu(hMenu HMENU, uFlags UINT, x, y int32, nReserved int32, hWnd HWND,prcRect *RECT) BOOL{
+	ret, _, _ := syscall.Syscall12(MustGetProcAddress(libuser32, "TrackPopupMenu"), 7,
+		uintptr(hMenu),
+		uintptr(uFlags),
+		uintptr(x),
+		uintptr(y),
+		uintptr(nReserved),
+		uintptr(hWnd),
+		uintptr(unsafe.Pointer(prcRect)),
+		0,0,0,0,0)
+        
+	return BOOL(ret)
+}
