@@ -3141,3 +3141,30 @@ func LoadStringA(hInstance HINSTANCE, uID UINT, lpBuffer uintptr, nBufferMax INT
         
 	return INT(ret)
 }
+
+func GetMenu(hWnd HWND)HMENU{
+	ret, _, _ := syscall.Syscall(MustGetProcAddress(libuser32, "GetMenu"), 1,
+		uintptr(hWnd),
+        0,
+        0)
+        
+	return HMENU(ret)
+}
+
+func CheckMenuItem(     hmenu HMENU,     uIDCheckItem UINT,     uCheck UINT)DWORD {
+	ret, _, _ := syscall.Syscall(MustGetProcAddress(libuser32, "CheckMenuItem"), 3,
+		uintptr(hmenu),
+		uintptr(uIDCheckItem),
+		uintptr(uCheck))
+        
+	return DWORD(ret)
+}
+
+func  EnableMenuItem(     hMenu HMENU,    uIDEnableItem,     uEnable UINT) BOOL{
+	ret, _, _ := syscall.Syscall(MustGetProcAddress(libuser32, "EnableMenuItem"), 3,
+		uintptr(hMenu),
+		uintptr(uIDEnableItem),
+		uintptr(uEnable))
+        
+	return BOOL(ret)
+}
