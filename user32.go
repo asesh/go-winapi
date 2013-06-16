@@ -3222,3 +3222,31 @@ func AppendMenu(hMenu HMENU, uFlags UINT, uIDNewItem UINT_PTR, lpNewItem LPCTSTR
         
 	return BOOL(ret)    
 }
+
+func DialogBoxParam(hInstance HINSTANCE, lpTemplate LPCTSTR, hWndParent HWND,  lpDialogFunc uintptr, dwInitParam uintptr) uintptr{
+	ret, _, _ := syscall.Syscall6(MustGetProcAddress(libuser32, "DialogBoxParamW"), 5,
+		uintptr(hInstance),
+		uintptr(unsafe.Pointer(lpTemplate)),
+		uintptr(hWndParent),
+		lpDialogFunc,
+		dwInitParam,
+		0)
+        
+	return ret
+}
+
+func DialogBox(hInstance HINSTANCE, lpTemplate LPCTSTR, hWndParent HWND,  lpDialogFunc uintptr) uintptr{
+    return DialogBoxParam(hInstance, lpTemplate, hWndParent, lpDialogFunc, 0)
+}
+
+func EndDialog(hDlg HWND, nResult uint32)BOOL{
+	ret, _, _ := syscall.Syscall6(MustGetProcAddress(libuser32, "EndDialog"), 2,
+		uintptr(hDlg),
+		uintptr(nResult),
+		0,
+        0,
+		0,
+		0)
+        
+	return BOOL(ret)
+}
