@@ -3250,3 +3250,15 @@ func EndDialog(hDlg HWND, nResult uint32)BOOL{
         
 	return BOOL(ret)
 }
+
+func CheckRadioButton(hDlg HWND, nIDFirstButton, nIDLastButton, nIDCheckButton int32)BOOL {
+	ret, _, _ := syscall.Syscall6(MustGetProcAddress(libuser32, "CheckRadioButton"), 4,
+		uintptr(hDlg),
+		uintptr(nIDFirstButton),
+		uintptr(nIDLastButton),
+		uintptr(nIDCheckButton),
+		0,
+		0)
+        
+	return BOOL(ret)
+}
