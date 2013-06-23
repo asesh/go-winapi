@@ -3262,3 +3262,27 @@ func CheckRadioButton(hDlg HWND, nIDFirstButton, nIDLastButton, nIDCheckButton i
         
 	return BOOL(ret)
 }
+
+func GetWindowText(hWnd HWND, lpString *uint16, nMaxCount int32) int32{
+	ret, _, _ := syscall.Syscall6(MustGetProcAddress(libuser32, "GetWindowTextW"), 3,
+		uintptr(hWnd),
+		uintptr(unsafe.Pointer(lpString)),
+		uintptr(nMaxCount),
+		0,
+		0,
+		0)
+        
+	return int32(ret)
+}
+
+func GetWindowTextA(hWnd HWND, lpString uintptr, nMaxCount int32) int32{
+	ret, _, _ := syscall.Syscall6(MustGetProcAddress(libuser32, "GetWindowTextA"), 3,
+		uintptr(hWnd),
+		lpString,
+		uintptr(nMaxCount),
+		0,
+		0,
+		0)
+        
+	return int32(ret)
+}
