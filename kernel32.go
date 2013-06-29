@@ -186,6 +186,8 @@ type (
     LPVOID    uintptr
 )
 
+const MAXDWORD DWORD = 4294967295
+
 type FILETIME struct {
 	DwLowDateTime  uint32
 	DwHighDateTime uint32

@@ -10,7 +10,7 @@ import (
 )
 
 const CW_USEDEFAULT = ^0x7fffffff
-
+const DLGWINDOWEXTRA = 48
 const (
     DDL_READWRITE   = 0
     DDL_READONLY    = 1
@@ -3310,6 +3310,18 @@ func SetDlgItemInt(hDlg HWND, nIDDlgItem int32, uValue UINT, bSigned BOOL) BOOL 
 		uintptr(nIDDlgItem),
 		uintptr(uValue),
 		uintptr(bSigned),
+		0,
+		0)
+        
+	return BOOL(ret)
+}
+
+func SetDlgItemText(hDlg HWND, nIDDlgItem int32, lpString *uint16) BOOL {
+	ret, _, _ := syscall.Syscall6(MustGetProcAddress(libuser32, "SetDlgItemTextW"), 3,
+		uintptr(hDlg),
+		uintptr(nIDDlgItem),
+		uintptr(unsafe.Pointer(lpString)),
+		0,
 		0,
 		0)
         
