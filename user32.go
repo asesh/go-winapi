@@ -3286,3 +3286,32 @@ func GetWindowTextA(hWnd HWND, lpString uintptr, nMaxCount int32) int32{
         
 	return int32(ret)
 }
+
+func CreateDialog(hInstance HINSTANCE, lpTemplate LPCTSTR, hWndParent HWND, lpDialogFunc uintptr)HWND{
+    return CreateDialogParam(hInstance, lpTemplate, hWndParent, lpDialogFunc, 0)
+}
+
+func CreateDialogParam(hInstance HINSTANCE, lpTemplateName LPCTSTR, hWndParent HWND, lpDialogFunc uintptr,dwInitParam uintptr) HWND{
+	ret, _, _ := syscall.Syscall6(MustGetProcAddress(libuser32, "CreateDialogParamW"), 5,
+		uintptr(hInstance),
+		uintptr(unsafe.Pointer(lpTemplateName)),
+		uintptr(hWndParent),
+		lpDialogFunc,
+		dwInitParam,
+		0)
+        
+	return HWND(ret)
+}
+
+
+func SetDlgItemInt(hDlg HWND, nIDDlgItem int32, uValue UINT, bSigned BOOL) BOOL {
+	ret, _, _ := syscall.Syscall6(MustGetProcAddress(libuser32, "SetDlgItemInt"), 4,
+		uintptr(hDlg),
+		uintptr(nIDDlgItem),
+		uintptr(uValue),
+		uintptr(bSigned),
+		0,
+		0)
+        
+	return BOOL(ret)
+}
